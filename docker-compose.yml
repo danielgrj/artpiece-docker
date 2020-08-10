@@ -34,12 +34,13 @@ services:
       NODE_ENV: development
       DB: mongodb://root:example@mongo:27017/artpiece-db
       SECRET: thisisasecret
-      PORT: 3005
-      FRONTEND_ENDPOINT: http://localhost:3005
+      PORT: 4000
+      FRONTEND_ENDPOINT: http://localhost:4000
       JWT_SECRET: thisisaplaceholder
       ORIGIN: http://localhost:3006
+      LEVEL: debug
     ports:
-      - '3005:3005'
+      - '4000:4000'
     volumes:
       - ../artpiece-api:/opt/node_app/app:delegated
     depends_on:
