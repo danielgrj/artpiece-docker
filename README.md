@@ -1,4 +1,4 @@
-# {{ name }} Docker
+# artpiece Docker
 
 To make easier the environment set up, docker and docker-compose will be used. It's recommended that you read about this
 tool to better understand its usefulness.
