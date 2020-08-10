@@ -1,0 +1,55 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: artpiece-db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./init-mongodb.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongodata:/data/db
+      - mongoconfig:/data/configdb
+    networks:
+      - backend
+  mongo-express:
+    image: mongo-express
+    ports:
+      - '8081:8081'
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    networks:
+      - backend
+  backend:
+    build:
+      context: ../artpiece-api/
+      args:
+        - NODE_ENV=development
+    restart: always
+    environment:
+      NODE_ENV: development
+      DB: mongodb://root:example@mongo:27017/artpiece-db
+      SECRET: thisisasecret
+      PORT: 3005
+      FRONTEND_ENDPOINT: http://localhost:3005
+      JWT_SECRET: thisisaplaceholder
+      ORIGIN: http://localhost:3006
+    ports:
+      - '3005:3005'
+    volumes:
+      - ../artpiece-api:/opt/node_app/app:delegated
+    depends_on:
+      - mongo
+    networks:
+      - backend
+volumes:
+  mongodata:
+  mongoconfig:
+  notused:
+networks:
+  backend:
+    driver: bridge
